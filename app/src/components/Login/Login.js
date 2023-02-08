@@ -46,9 +46,20 @@ const Login = (props) => {
     isValid: null,
   });
 
+  // optimizing the useEffect to check only for the validity of the fields
+  const { isValid: emailIsValid } = emailState;
+  const { isValid: passIsValid } = passwordState;
+
   useEffect(() => {
-    setFormIsValid(emailState.isValid && passwordState.isValid);
-  }, [emailState, passwordState]);
+    const indentifier = setTimeout(() => {
+      console.log('Check for validity: ');
+      setFormIsValid(emailIsValid && passIsValid);
+    }, 500);
+
+    return () => {
+      clearTimeout(indentifier);
+    };
+  }, [emailIsValid, passIsValid]);
 
   const emailChangeHandler = (event) => {
     // setEnteredEmail(event.target.value);
@@ -63,7 +74,7 @@ const Login = (props) => {
   };
 
   const validateEmailHandler = () => {
-    // one state (formIsValid - depends on another state - emailIsValid
+    // one state emailIsValid - depends on another state - enteredEmail
     // this is not a good practice
     // setEmailIsValid(enteredEmail.includes('@'));
 
